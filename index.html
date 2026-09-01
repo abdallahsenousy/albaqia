@@ -1,32 +1,61 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta
+    name="google"
+    content="notranslate">
 
   <title>الباقية</title>
 
+
   <style>
+
     html,
     body {
+
       margin: 0;
       padding: 0;
+
       width: 100%;
       height: 100%;
+
       overflow: hidden;
+
       background: #f7f5ef;
+
     }
+
 
     #albaqiaApp {
+
       width: 100%;
+
       height: 100vh;
+      height: 100dvh;
+
       border: 0;
+
       display: block;
+
+      background: #f7f5ef;
+
     }
+
   </style>
+
 </head>
 
+
 <body>
+
 
   <iframe
     id="albaqiaApp"
@@ -34,31 +63,94 @@
     allow="autoplay">
   </iframe>
 
+
   <script>
+
     const APPS_SCRIPT_URL =
       "https://script.google.com/macros/s/AKfycbzUSf-7s34cW5L0cFliTOOlVgjj2wnmWWhwvdJAK-xiRRIwrKvuswKzH1bpbEfM4BpLkg/exec";
 
-const path =
-  window.location.pathname
-    .replace(/^\/+|\/+$/g, "");
 
-const params =
-  new URLSearchParams(window.location.search);
+    /* ========================================
+       قراءة الرابط
+    ======================================== */
 
-const page =
-  path || params.get("page");
+    const path =
+      window.location.pathname
+        .replace(
+          /^\/+|\/+$/g,
+          ""
+        );
 
-let appUrl = APPS_SCRIPT_URL;
 
-if (page) {
-  appUrl +=
-    "?page=" +
-    encodeURIComponent(page);
-}
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
 
-document.getElementById("albaqiaApp").src =
-  appUrl;
+
+    let appUrl =
+      APPS_SCRIPT_URL;
+
+
+    /* ========================================
+       لوحة الإدارة
+       albaqia.com/admin
+    ======================================== */
+
+    if (
+      path.toLowerCase() ===
+      "admin"
+    ) {
+
+      appUrl +=
+        "?action=admin";
+
+      document.title =
+        "لوحة إدارة الباقية";
+
+    }
+
+
+    /* ========================================
+       صفحات المتوفين
+    ======================================== */
+
+    else {
+
+      const page =
+        path ||
+        params.get(
+          "page"
+        );
+
+
+      if (page) {
+
+        appUrl +=
+          "?page=" +
+          encodeURIComponent(
+            page
+          );
+
+      }
+
+    }
+
+
+    /* ========================================
+       تشغيل تطبيق الباقية
+    ======================================== */
+
+    document
+      .getElementById(
+        "albaqiaApp"
+      )
+      .src =
+      appUrl;
+
   </script>
 
+
 </body>
+
 </html>
