@@ -110,6 +110,34 @@
 
     }
 
+      else if (
+  params.get("action") ===
+  "easykash_return"
+) {
+
+  const order =
+    params.get(
+      "order"
+    );
+
+  appUrl +=
+    "?action=easykash_return";
+
+  if (order) {
+
+    appUrl +=
+      "&order=" +
+      encodeURIComponent(
+        order
+      );
+
+  }
+
+  document.title =
+    "تأكيد الدفع | الباقية";
+
+}
+
 else if (
   params.get("action") ===
   "complete_order"
