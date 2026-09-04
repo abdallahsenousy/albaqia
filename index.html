@@ -238,6 +238,32 @@ else if (
   </script>
 
 
+  <div
+  id="debugOrder"
+  style="
+    position:fixed;
+    bottom:10px;
+    left:10px;
+    z-index:999999;
+    background:#fff;
+    padding:10px;
+    border:1px solid #ccc;
+    font-size:12px;
+  "
+></div>
+
+<script>
+  document.getElementById(
+    "debugOrder"
+  ).textContent =
+    "Pending: " +
+    (
+      localStorage.getItem(
+        "albaqiaPendingOrder"
+      ) || "null"
+    );
+</script>
+
 </body>
 
 </html>
