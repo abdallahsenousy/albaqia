@@ -110,7 +110,33 @@
 
     }
 
+else if (
+  params.get("action") ===
+  "complete_order"
+) {
 
+  const order =
+    params.get(
+      "order"
+    );
+
+  appUrl +=
+    "?action=complete_order";
+
+  if (order) {
+
+    appUrl +=
+      "&order=" +
+      encodeURIComponent(
+        order
+      );
+
+  }
+
+  document.title =
+    "استكمال بيانات الطلب | الباقية";
+
+}
     /* ========================================
        صفحات المتوفين
     ======================================== */
