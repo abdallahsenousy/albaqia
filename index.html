@@ -7,20 +7,20 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
 
   <meta
     name="google"
-    content="notranslate">
+    content="notranslate"
+  >
 
   <title>الباقية</title>
-
 
   <style>
 
     html,
     body {
-
       margin: 0;
       padding: 0;
 
@@ -30,12 +30,10 @@
       overflow: hidden;
 
       background: #f7f5ef;
-
     }
 
 
     #albaqiaApp {
-
       width: 100%;
 
       height: 100vh;
@@ -46,7 +44,28 @@
       display: block;
 
       background: #f7f5ef;
+    }
 
+
+    #debugOrder {
+      position: fixed;
+
+      bottom: 10px;
+      left: 10px;
+
+      z-index: 999999;
+
+      background: #ffffff;
+
+      padding: 10px;
+
+      border: 1px solid #cccccc;
+
+      border-radius: 6px;
+
+      font-size: 12px;
+
+      direction: ltr;
     }
 
   </style>
@@ -62,6 +81,9 @@
     title="الباقية"
     allow="autoplay">
   </iframe>
+
+
+  <div id="debugOrder"></div>
 
 
   <script>
@@ -88,47 +110,66 @@
       );
 
 
+    const pendingOrderId =
+      localStorage.getItem(
+        "albaqiaPendingOrder"
+      );
+
+
     let appUrl =
       APPS_SCRIPT_URL;
 
+
+    /* ========================================
+       Bridge قديم / احتياطي
+       albaqia.com/?action=pay
+    ======================================== */
+
     const paymentAction =
-  params.get("action");
+      params.get(
+        "action"
+      );
 
-if (
-  paymentAction === "pay"
-) {
 
-  const pendingOrder =
-    String(
-      params.get("order") || ""
-    ).trim();
+    if (
+      paymentAction === "pay"
+    ) {
 
-  const paymentUrl =
-    String(
-      params.get("paymentUrl") || ""
-    ).trim();
+      const pendingOrder =
+        String(
+          params.get(
+            "order"
+          ) || ""
+        ).trim();
 
-  if (
-    pendingOrder &&
-    paymentUrl
-  ) {
 
-    localStorage.setItem(
-      "albaqiaPendingOrder",
-      pendingOrder
-    );
+      const paymentUrl =
+        String(
+          params.get(
+            "paymentUrl"
+          ) || ""
+        ).trim();
 
-    window.location.replace(
-      paymentUrl
-    );
 
-  }
+      if (
+        pendingOrder &&
+        paymentUrl
+      ) {
 
-}
-    const pendingOrderId =
-  localStorage.getItem(
-    "albaqiaPendingOrder"
-  );
+        localStorage.setItem(
+          "albaqiaPendingOrder",
+          pendingOrder
+        );
+
+
+        window.location.replace(
+          paymentUrl
+        );
+
+      }
+
+    }
+
 
     /* ========================================
        لوحة الإدارة
@@ -143,68 +184,112 @@ if (
       appUrl +=
         "?action=admin";
 
+
       document.title =
         "لوحة إدارة الباقية";
 
     }
 
-      else if (
-  params.get("action") ===
-  "easykash_return"
-) {
 
-  const order =
-    params.get(
-      "order"
-    );
-
-  appUrl +=
-    "?action=easykash_return";
-
-  if (order) {
-
-    appUrl +=
-      "&order=" +
-      encodeURIComponent(
-        order
-      );
-
-  }
-
-  document.title =
-    "تأكيد الدفع | الباقية";
-
-}
-
-else if (
-  params.get("action") ===
-  "complete_order"
-) {
-
-  const order =
-    params.get(
-      "order"
-    );
-
-  appUrl +=
-    "?action=complete_order";
-
-  if (order) {
-
-    appUrl +=
-      "&order=" +
-      encodeURIComponent(
-        order
-      );
-
-  }
-
-  document.title =
-    "استكمال بيانات الطلب | الباقية";
-
-}
     /* ========================================
-       صفحات المتوفين
+       رجوع EasyKash
+    ======================================== */
+
+    else if (
+      params.get(
+        "action"
+      ) === "easykash_return"
+    ) {
+
+      const order =
+        params.get(
+          "order"
+        );
+
+
+      appUrl +=
+        "?action=easykash_return";
+
+
+      if (order) {
+
+        appUrl +=
+          "&order=" +
+          encodeURIComponent(
+            order
+          );
+
+      }
+
+
+      document.title =
+        "تأكيد الدفع | الباقية";
+
+    }
+
+
+    /* ========================================
+       استكمال بيانات الطلب
+    ======================================== */
+
+    else if (
+      params.get(
+        "action"
+      ) === "complete_order"
+    ) {
+
+      const order =
+        params.get(
+          "order"
+        );
+
+
+      appUrl +=
+        "?action=complete_order";
+
+
+      if (order) {
+
+        appUrl +=
+          "&order=" +
+          encodeURIComponent(
+            order
+          );
+
+      }
+
+
+      document.title =
+        "استكمال بيانات الطلب | الباقية";
+
+    }
+
+
+    /* ========================================
+       الرجوع يدويًا من EasyKash
+    ======================================== */
+
+    else if (
+      !path &&
+      pendingOrderId
+    ) {
+
+      appUrl +=
+        "?action=easykash_return" +
+        "&order=" +
+        encodeURIComponent(
+          pendingOrderId
+        );
+
+
+      document.title =
+        "تأكيد الدفع | الباقية";
+
+    }
+
+
+    /* ========================================
+       صفحات المتوفين / Landing
     ======================================== */
 
     else {
@@ -240,63 +325,99 @@ else if (
       .src =
       appUrl;
 
+
+    /* ========================================
+       استقبال بدء الدفع من Landing
+    ======================================== */
+
     window.addEventListener(
-  "message",
-  function(event) {
+      "message",
+      function(event) {
 
-    if (
-      !event.data ||
-      event.data.type !==
-        "ALBAQIA_PAYMENT_STARTED"
-    ) {
-      return;
-    }
+        if (
+          !event.data ||
+          event.data.type !==
+            "ALBAQIA_PAYMENT_STARTED"
+        ) {
+          return;
+        }
 
-    const orderId =
-      String(
-        event.data.orderId || ""
-      ).trim();
 
-    if (!orderId) {
-      return;
-    }
+        const orderId =
+          String(
+            event.data.orderId || ""
+          ).trim();
 
-    localStorage.setItem(
-      "albaqiaPendingOrder",
-      orderId
+
+        const paymentUrl =
+          String(
+            event.data.paymentUrl || ""
+          ).trim();
+
+
+        if (
+          !orderId ||
+          !paymentUrl
+        ) {
+          return;
+        }
+
+
+        /* حفظ الطلب على albaqia.com */
+
+        localStorage.setItem(
+          "albaqiaPendingOrder",
+          orderId
+        );
+
+
+        /* تحديث مربع الاختبار */
+
+        updateDebugOrder();
+
+
+        /* التحويل من الدومين نفسه إلى EasyKash */
+
+        window.location.href =
+          paymentUrl;
+
+      }
     );
 
-  }
-);
-    
+
+    /* ========================================
+       Debug مؤقت
+    ======================================== */
+
+    function updateDebugOrder() {
+
+      const debug =
+        document.getElementById(
+          "debugOrder"
+        );
+
+
+      if (!debug) {
+        return;
+      }
+
+
+      debug.textContent =
+        "Pending: " +
+        (
+          localStorage.getItem(
+            "albaqiaPendingOrder"
+          ) ||
+          "null"
+        );
+
+    }
+
+
+    updateDebugOrder();
+
   </script>
 
-
-  <div
-  id="debugOrder"
-  style="
-    position:fixed;
-    bottom:10px;
-    left:10px;
-    z-index:999999;
-    background:#fff;
-    padding:10px;
-    border:1px solid #ccc;
-    font-size:12px;
-  "
-></div>
-
-<script>
-  document.getElementById(
-    "debugOrder"
-  ).textContent =
-    "Pending: " +
-    (
-      localStorage.getItem(
-        "albaqiaPendingOrder"
-      ) || "null"
-    );
-</script>
 
 </body>
 
