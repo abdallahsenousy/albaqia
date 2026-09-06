@@ -108,7 +108,15 @@
       new URLSearchParams(
         window.location.search
       );
+if (
+  params.get("clearPending") === "1"
+) {
 
+  localStorage.removeItem(
+    "albaqiaPendingOrder"
+  );
+
+}
 
     const pendingOrderId =
       localStorage.getItem(
