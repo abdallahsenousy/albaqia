@@ -376,7 +376,49 @@ if (
       }
     );
 
+window.addEventListener(
+  "message",
+  function(event) {
 
+    if (
+      !event.data ||
+      event.data.type !==
+        "ALBAQIA_PAYMENT_RETURN"
+    ) {
+      return;
+    }
+
+    const orderId =
+      String(
+        event.data.orderId || ""
+      ).trim();
+
+    const paid =
+      event.data.paid === true;
+
+    const targetUrl =
+      String(
+        event.data.targetUrl || ""
+      ).trim();
+
+    if (paid) {
+
+      localStorage.removeItem(
+        "albaqiaPendingOrder"
+      );
+
+    }
+
+    if (targetUrl) {
+
+      window.location.replace(
+        targetUrl
+      );
+
+    }
+
+  }
+);
     /* ========================================
        Debug مؤقت
     ======================================== */
