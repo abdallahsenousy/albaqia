@@ -91,6 +91,40 @@
     let appUrl =
       APPS_SCRIPT_URL;
 
+    const paymentAction =
+  params.get("action");
+
+if (
+  paymentAction === "pay"
+) {
+
+  const pendingOrder =
+    String(
+      params.get("order") || ""
+    ).trim();
+
+  const paymentUrl =
+    String(
+      params.get("paymentUrl") || ""
+    ).trim();
+
+  if (
+    pendingOrder &&
+    paymentUrl
+  ) {
+
+    localStorage.setItem(
+      "albaqiaPendingOrder",
+      pendingOrder
+    );
+
+    window.location.replace(
+      paymentUrl
+    );
+
+  }
+
+}
     const pendingOrderId =
   localStorage.getItem(
     "albaqiaPendingOrder"
