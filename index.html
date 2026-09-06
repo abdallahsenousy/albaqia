@@ -370,6 +370,16 @@ if (
 
         /* التحويل من الدومين نفسه إلى EasyKash */
 
+        history.replaceState(
+  {},
+  "",
+  "/?action=easykash_return" +
+  "&order=" +
+  encodeURIComponent(
+    orderId
+  )
+);
+        
         window.location.href =
           paymentUrl;
 
