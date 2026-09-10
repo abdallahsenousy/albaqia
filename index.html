@@ -469,7 +469,62 @@ window.addEventListener(
   }
 );
     updateDebugOrder();
+window.addEventListener(
+  "message",
+  async function(event) {
 
+    if (
+      !event.data ||
+      event.data.type !== "ALBAQIA_SHARE"
+    ) {
+      return;
+    }
+
+    const data =
+      event.data.shareData || {};
+
+    if (navigator.share) {
+
+      try {
+
+        await navigator.share({
+          title:
+            data.title ||
+            "الباقية",
+
+          text:
+            data.text ||
+            "",
+
+          url:
+            data.url ||
+            window.location.href
+        });
+
+        return;
+
+      }
+      catch (error) {
+
+        if (
+          error &&
+          error.name === "AbortError"
+        ) {
+          return;
+        }
+
+      }
+
+    }
+
+    window.prompt(
+      "انسخ رابط الصفحة:",
+      data.url ||
+      window.location.href
+    );
+
+  }
+);
   </script>
 
 
