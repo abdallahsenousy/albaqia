@@ -276,33 +276,78 @@ if (
        الرجوع يدويًا من EasyKash
     ======================================== */
 
+else if (
+  params.get(
+    "action"
+  ) === "manual_complete_order"
+) {
 
+  const order =
+    params.get(
+      "order"
+    );
+
+  appUrl +=
+    "?action=manual_complete_order";
+
+  if (order) {
+
+    appUrl +=
+      "&order=" +
+      encodeURIComponent(
+        order
+      );
+
+  }
+
+  document.title =
+    "استكمال بيانات الطلب | الباقية";
+
+}
 
 
     /* ========================================
        صفحات المتوفين / Landing
     ======================================== */
 
-    else {
+   else {
 
-      const page =
-        path ||
-        params.get(
-          "page"
+  if (
+    pendingOrderId &&
+    !params.get("payment")
+  ) {
+
+    appUrl +=
+      "?action=easykash_return" +
+      "&order=" +
+      encodeURIComponent(
+        pendingOrderId
+      );
+
+    document.title =
+      "تأكيد الدفع | الباقية";
+
+  } else {
+
+    const page =
+      path ||
+      params.get(
+        "page"
+      );
+
+    if (page) {
+
+      appUrl +=
+        "?page=" +
+        encodeURIComponent(
+          page
         );
 
-
-      if (page) {
-
-        appUrl +=
-          "?page=" +
-          encodeURIComponent(
-            page
-          );
-
-      }
-
     }
+
+  }
+
+}
 
 
     /* ========================================
@@ -418,14 +463,18 @@ window.addEventListener(
 
     }
 
-    if (targetUrl) {
+   if (
+  targetUrl &&
+  targetUrl.startsWith(
+    "https://albaqia.com/"
+  )
+) {
 
-      window.location.replace(
-        targetUrl
-      );
+  window.location.replace(
+    targetUrl
+  );
 
-    }
-
+}
   }
 );
     /* ========================================
