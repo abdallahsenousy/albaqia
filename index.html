@@ -401,7 +401,6 @@ const page =
       appUrl;
 
 
-  
 let deferredInstallPrompt = null;
 
 
@@ -417,6 +416,76 @@ window.addEventListener(
 
     deferredInstallPrompt =
       event;
+
+    const iframe =
+      document.getElementById(
+        "albaqiaApp"
+      );
+
+    if (
+      iframe &&
+      iframe.contentWindow
+    ) {
+
+      iframe.contentWindow.postMessage(
+        {
+          type:
+            "ALBAQIA_INSTALL_READY"
+        },
+        "*"
+      );
+
+    }
+
+  }
+);
+
+
+/* ========================================
+   استقبال طلب التثبيت من صفحة المتوفى
+======================================== */
+
+window.addEventListener(
+  "message",
+  async function(event) {
+
+    const iframe =
+      document.getElementById(
+        "albaqiaApp"
+      );
+
+    if (
+      !iframe ||
+      event.source !==
+        iframe.contentWindow
+    ) {
+      return;
+    }
+
+
+    if (
+      !event.data ||
+      event.data.type !==
+        "ALBAQIA_INSTALL_REQUEST"
+    ) {
+      return;
+    }
+
+
+    if (
+      !deferredInstallPrompt
+    ) {
+      return;
+    }
+
+
+    deferredInstallPrompt.prompt();
+
+    await deferredInstallPrompt
+      .userChoice;
+
+    deferredInstallPrompt =
+      null;
 
   }
 );
