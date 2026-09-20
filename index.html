@@ -402,7 +402,25 @@ const page =
 
 
   
+let deferredInstallPrompt = null;
 
+
+/* ========================================
+   تجهيز تثبيت الباقية
+======================================== */
+
+window.addEventListener(
+  "beforeinstallprompt",
+  function(event) {
+
+    event.preventDefault();
+
+    deferredInstallPrompt =
+      event;
+
+  }
+);
+    
 window.addEventListener(
   "message",
   function(event) {
