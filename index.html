@@ -399,7 +399,32 @@ const page =
       )
       .src =
       appUrl;
+const albaqiaFrame =
+  document.getElementById(
+    "albaqiaApp"
+  );
 
+albaqiaFrame.addEventListener(
+  "load",
+  function() {
+
+    if (
+      deferredInstallPrompt &&
+      albaqiaFrame.contentWindow
+    ) {
+
+      albaqiaFrame.contentWindow.postMessage(
+        {
+          type:
+            "ALBAQIA_INSTALL_READY"
+        },
+        "*"
+      );
+
+    }
+
+  }
+);
 
 let deferredInstallPrompt = null;
 
