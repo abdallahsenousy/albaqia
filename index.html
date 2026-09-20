@@ -291,7 +291,41 @@ else if (
     "استكمال بيانات الطلب | الباقية";
 
 }
+/* ========================================
+   Manifest
+======================================== */
 
+else if (
+  params.get(
+    "action"
+  ) === "manifest"
+) {
+
+  const page =
+    params.get(
+      "page"
+    );
+
+
+  appUrl +=
+    "?action=manifest";
+
+
+  if (page) {
+
+    appUrl +=
+      "&page=" +
+      encodeURIComponent(
+        page
+      );
+
+  }
+
+
+  document.title =
+    "الباقية";
+
+}
     /* ========================================
        صفحات المتوفين / Landing
     ======================================== */
