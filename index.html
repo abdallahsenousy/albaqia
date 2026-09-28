@@ -525,20 +525,6 @@ window.addEventListener(
   "message",
   async function(event) {
 
-    const iframe =
-      document.getElementById(
-        "albaqiaApp"
-      );
-
-    if (
-      !iframe ||
-      event.source !==
-        iframe.contentWindow
-    ) {
-      return;
-    }
-
-
     if (
       !event.data ||
       event.data.type !==
@@ -548,28 +534,39 @@ window.addEventListener(
     }
 
 
-if (
-  !deferredInstallPrompt
-) {
+    /* لو Chrome أتاح التثبيت المباشر */
 
-  iframe.contentWindow.postMessage(
-    {
-      type:
-        "ALBAQIA_INSTALL_FALLBACK"
-    },
-    "*"
-  );
+    if (
+      deferredInstallPrompt
+    ) {
 
-  return;
-}
+      deferredInstallPrompt.prompt();
 
-    deferredInstallPrompt.prompt();
+      try {
 
-    await deferredInstallPrompt
-      .userChoice;
+        await deferredInstallPrompt
+          .userChoice;
 
-    deferredInstallPrompt =
-      null;
+      }
+      catch (error) {
+      }
+
+      deferredInstallPrompt =
+        null;
+
+      return;
+    }
+
+
+    /* لو التثبيت المباشر غير متاح */
+
+    alert(
+      "لإضافة صفحة المتوفى إلى الشاشة الرئيسية:\n\n" +
+      "1- اضغط على ⋮ أعلى Chrome\n" +
+      "2- اختر «التثبيت وإنشاء اختصار»\n" +
+      "3- اختر «إنشاء اختصار»\n" +
+      "4- اضغط «إضافة»"
+    );
 
   }
 );
