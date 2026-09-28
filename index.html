@@ -90,6 +90,38 @@
 
 const APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbzUSf-7s34cW5L0cFliTOOlVgjj2wnmWWhwvdJAK-xiRRIwrKvuswKzH1bpbEfM4BpLkg/exec";
+
+    /* ========================================
+   تسجيل Service Worker
+======================================== */
+
+if (
+  "serviceWorker" in navigator
+) {
+
+  window.addEventListener(
+    "load",
+    function() {
+
+      navigator.serviceWorker
+        .register(
+          "/sw.js"
+        )
+        .catch(
+          function(error) {
+
+            console.error(
+              "Service Worker Error:",
+              error
+            );
+
+          }
+        );
+
+    }
+  );
+
+}
     /* ========================================
        قراءة الرابط
     ======================================== */
