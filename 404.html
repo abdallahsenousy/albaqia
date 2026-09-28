@@ -15,6 +15,45 @@
 
   <title>الباقية</title>
 
+  <link
+    rel="manifest"
+    href="/manifest.webmanifest">
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="/albaqia-icon-192.png">
+
+  <link
+    rel="apple-touch-icon"
+    href="/albaqia-icon-512.png">
+
+  <meta
+    name="theme-color"
+    content="#123f36">
+
+
+  <script>
+
+    window.deferredInstallPrompt =
+      null;
+
+
+    window.addEventListener(
+      "beforeinstallprompt",
+      function(event) {
+
+        event.preventDefault();
+
+        window.deferredInstallPrompt =
+          event;
+
+      }
+    );
+
+  </script>
+
 
   <style>
 
@@ -71,6 +110,39 @@
 
 
     /* ========================================
+       تسجيل Service Worker
+    ======================================== */
+
+    if (
+      "serviceWorker" in navigator
+    ) {
+
+      window.addEventListener(
+        "load",
+        function() {
+
+          navigator.serviceWorker
+            .register(
+              "/sw.js"
+            )
+            .catch(
+              function(error) {
+
+                console.error(
+                  "Service Worker Error:",
+                  error
+                );
+
+              }
+            );
+
+        }
+      );
+
+    }
+
+
+    /* ========================================
        قراءة الرابط
     ======================================== */
 
@@ -94,7 +166,6 @@
 
     /* ========================================
        لوحة الإدارة
-       albaqia.com/admin
     ======================================== */
 
     if (
@@ -112,7 +183,7 @@
 
 
     /* ========================================
-       صفحات المتوفين
+       صفحة المتوفى
     ======================================== */
 
     else {
@@ -138,15 +209,76 @@
 
 
     /* ========================================
-       تشغيل تطبيق الباقية
+       تشغيل الباقية
     ======================================== */
 
-    document
-      .getElementById(
+    const albaqiaFrame =
+      document.getElementById(
         "albaqiaApp"
-      )
-      .src =
+      );
+
+
+    albaqiaFrame.src =
       appUrl;
+
+
+    /* ========================================
+       استقبال طلب التثبيت
+    ======================================== */
+
+    window.addEventListener(
+      "message",
+      async function(event) {
+
+        if (
+          !event.data ||
+          event.data.type !==
+            "ALBAQIA_INSTALL_REQUEST"
+        ) {
+          return;
+        }
+
+
+        /* التثبيت المباشر لو متاح */
+
+        if (
+          window.deferredInstallPrompt
+        ) {
+
+          window.deferredInstallPrompt
+            .prompt();
+
+          try {
+
+            await window
+              .deferredInstallPrompt
+              .userChoice;
+
+          }
+          catch (error) {
+          }
+
+
+          window.deferredInstallPrompt =
+            null;
+
+          return;
+
+        }
+
+
+        /* الحل المضمون */
+
+        alert(
+          "لإضافة صفحة المتوفى إلى الشاشة الرئيسية:\n\n" +
+          "1- اضغط على ⋮ أعلى Chrome\n" +
+          "2- اختر «التثبيت وإنشاء اختصار»\n" +
+          "3- اختر «إنشاء اختصار»\n" +
+          "4- اضغط «إضافة»"
+        );
+
+      }
+    );
 
   </script>
 
