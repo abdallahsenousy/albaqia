@@ -548,12 +548,20 @@ window.addEventListener(
     }
 
 
-    if (
-      !deferredInstallPrompt
-    ) {
-      return;
-    }
+if (
+  !deferredInstallPrompt
+) {
 
+  iframe.contentWindow.postMessage(
+    {
+      type:
+        "ALBAQIA_INSTALL_FALLBACK"
+    },
+    "*"
+  );
+
+  return;
+}
 
     deferredInstallPrompt.prompt();
 
