@@ -418,11 +418,29 @@ if (
 
   } else {
 
+const isStandalone =
+  window.matchMedia(
+    "(display-mode: standalone)"
+  ).matches ||
+  window.navigator.standalone === true;
+
+
+const installedPage =
+  localStorage.getItem(
+    "albaqiaInstalledPage"
+  ) ||
+  "";
+
+
 const page =
   params.get(
     "page"
   ) ||
-  "";
+  (
+    isStandalone
+      ? installedPage
+      : ""
+  );
 
 
       if (page) {
@@ -458,6 +476,20 @@ albaqiaFrame.addEventListener(
   "load",
   function() {
 
+    const installPage =
+  path ||
+  params.get("page") ||
+  "";
+
+if (installPage) {
+
+  localStorage.setItem(
+    "albaqiaInstalledPage",
+    installPage
+  );
+
+}
+    
     if (
       deferredInstallPrompt &&
       albaqiaFrame.contentWindow
