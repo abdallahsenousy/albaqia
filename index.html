@@ -476,8 +476,9 @@ albaqiaFrame.addEventListener(
   }
 );
 
-let deferredInstallPrompt = null;
-
+let deferredInstallPrompt =
+  window.albaqiaInstallPrompt ||
+  null;
 
 /* ========================================
    تجهيز تثبيت الباقية
