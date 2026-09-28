@@ -16,6 +16,24 @@
   >
 
   <title>الباقية</title>
+
+  <script>
+
+  window.albaqiaInstallPrompt = null;
+
+  window.addEventListener(
+    "beforeinstallprompt",
+    function(event) {
+
+      event.preventDefault();
+
+      window.albaqiaInstallPrompt =
+        event;
+
+    }
+  );
+
+</script>
 <link
   rel="manifest"
   href="/manifest.webmanifest"
