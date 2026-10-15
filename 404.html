@@ -494,7 +494,45 @@
 
       }
     );
+window.addEventListener(
+  "message",
+  function(event) {
 
+    if (
+      !event.data ||
+      event.data.type !==
+        "ALBAQIA_SLUG_REDIRECT"
+    ) {
+      return;
+    }
+
+
+    const slug =
+      String(
+        event.data.slug || ""
+      )
+        .trim()
+        .toLowerCase();
+
+
+    if (
+      !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(
+        slug
+      )
+    ) {
+      return;
+    }
+
+
+    window.location.replace(
+      "https://albaqia.com/" +
+      encodeURIComponent(
+        slug
+      )
+    );
+
+  }
+);
   </script>
 
 
